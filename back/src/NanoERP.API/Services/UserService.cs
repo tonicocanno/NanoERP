@@ -18,7 +18,12 @@ namespace NanoERP.API.Services
             return _db.Users.FirstOrDefault(u => u.StringId == id);
         }
 
-        public User? GetByUsernameOrEmail(IUser user)
+        public User? FindByEmail(string email)
+        {
+            return _db.Users.AsNoTracking().FirstOrDefault(u => u.Email == email);
+        }
+
+        public User? FindByUsernameOrEmail(IUser user)
         {
             return _db.Users.AsNoTracking().FirstOrDefault(u => u.Username == user.Username || u.Email == user.Email);
         }
