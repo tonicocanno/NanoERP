@@ -9,7 +9,7 @@ using NanoERP.API.Services;
 namespace NanoERP.API.Controllers
 {
     [ApiController]
-    [Route("api/user")]
+    [Route("api/users")]
     public class UserController(DataContext db) : ControllerBase
     {
         private readonly UserService _userService = new(db);

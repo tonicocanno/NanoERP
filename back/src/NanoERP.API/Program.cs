@@ -12,8 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 DotEnv.Load();
 
-builder.Configuration["Jwt:Key"] = Environment.GetEnvironmentVariable("JWT_SECRET_KEY") ?? string.Empty;
-string connectionString = Environment.GetEnvironmentVariable("MONGODB_CONNECTION_STRING") ?? string.Empty;
+builder.Configuration["Jwt:Key"] = Environment.GetEnvironmentVariable("JWT_SECRET_KEY") ?? builder.Configuration["Jwt:Key"] ?? "";
+string connectionString = Environment.GetEnvironmentVariable("MONGODB_CONNECTION_STRING") ?? builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -66,3 +66,5 @@ app.UseCors(x => x.AllowAnyHeader()
 app.MapControllers();
 
 app.Run();
+
+public partial class Program {}

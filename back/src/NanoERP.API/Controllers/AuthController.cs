@@ -9,7 +9,7 @@ using NanoERP.API.Utilities;
 namespace NanoERP.API.Controllers
 {
     [ApiController]
-    [Route("api")]
+    [Route("api/auth")]
     public class AuthController(IConfiguration configuration, UserService userService, EmailService emailService) : ControllerBase
     {
         private readonly UserService _userService = userService;
@@ -67,7 +67,7 @@ namespace NanoERP.API.Controllers
             {
                 if (userChangePassword.NewPassword == userChangePassword.ConfirmPassword)
                 {
-                    user.Password = userChangePassword.NewPassword;
+                    user.Password = EncryptionService.Hash(userChangePassword.NewPassword);
 
                     _userService.Update(user);
 
