@@ -17,6 +17,6 @@ namespace NanoERP.API.Domain.Entities
         [BsonRepresentation(BsonType.ObjectId)]
         public string StringId => Id.ToString();
         [JsonPropertyOrder(-2)]
-        public virtual string Name { get; set; }
+        public virtual string Name { get; set; } = string.Empty;
     }
 }

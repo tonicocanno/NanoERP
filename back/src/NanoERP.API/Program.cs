@@ -5,16 +5,15 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using dotenv.net;
+using NanoERP.API.Services;
+using NanoERP.API.Utilities;
 
 var builder = WebApplication.CreateBuilder(args);
 
 DotEnv.Load();
 
-builder.Configuration["Jwt:Key"] = Environment.GetEnvironmentVariable("JWT_SECRET_KEY") ?? string.Empty;
-string connectionString = Environment.GetEnvironmentVariable("MONGODB_CONNECTION_STRING") ?? string.Empty;
-
-Console.WriteLine(builder.Configuration["Jwt:Key"]);
-Console.WriteLine(connectionString);
+builder.Configuration["Jwt:Key"] = Environment.GetEnvironmentVariable("JWT_SECRET_KEY") ?? builder.Configuration["Jwt:Key"] ?? "";
+string connectionString = Environment.GetEnvironmentVariable("MONGODB_CONNECTION_STRING") ?? builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -22,6 +21,10 @@ builder.Services.AddControllers();
 builder.Services.AddCors();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<UserService>();
+
+var emailService = new EmailServiceFactory(builder.Configuration).Create();
+builder.Services.AddSingleton(emailService);
 
 var mongoClient = new MongoClient(connectionString);
 var database = mongoClient.GetDatabase("NanoCluster");
@@ -63,3 +66,5 @@ app.UseCors(x => x.AllowAnyHeader()
 app.MapControllers();
 
 app.Run();
+
+public partial class Program {}
