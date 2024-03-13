@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
-using NanoERP.API.Data;
 using NanoERP.API.Domain.Entities;
-using NanoERP.API.Domain.Entities.DTO;
+using NanoERP.API.DTO;
 using NanoERP.API.Services;
 using NanoERP.API.Utilities;
 
@@ -87,7 +86,7 @@ namespace NanoERP.API.Controllers
 
             if (user != null)
             {
-                var newPassword = PasswordService.GenerateRandomPassword();
+                var newPassword = AuthService.GenerateRandomPassword();
 
                 user.Password = EncryptionService.Hash(newPassword);
 

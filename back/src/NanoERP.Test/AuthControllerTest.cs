@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using NanoERP.API.Domain.Entities.DTO;
+using NanoERP.API.Domain.DTO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Net.Http.Json;
