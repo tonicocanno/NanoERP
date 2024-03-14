@@ -4,52 +4,18 @@ using NanoERP.API.Domain.Entities;
 
 namespace NanoERP.API.Services
 {
-    public class UserService(DataContext db)
+    public class UserService(DataContext db) : ServiceBase<User>(db)
     {
         private readonly DataContext _db = db;
-        
-        public IEnumerable<User> Get()
+
+        public async Task<User?> FindByEmailAsync(string email)
         {
-            return [.. _db.Users.AsNoTracking()];
+            return await _db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email);
         }
 
-        public User? GetById(string id)
+        public async Task<User?> FindByUsernameOrEmailAsync(IUser user)
         {
-            return _db.Users.FirstOrDefault(u => u.StringId == id);
-        }
-
-        public User? FindByEmail(string email)
-        {
-            return _db.Users.AsNoTracking().FirstOrDefault(u => u.Email == email);
-        }
-
-        public User? FindByUsernameOrEmail(IUser user)
-        {
-            return _db.Users.AsNoTracking().FirstOrDefault(u => u.Username == user.Username || u.Email == user.Email);
-        }
-
-        public void Update(User user)
-        {
-            _db.Users.Update(user);
-            _db.SaveChanges();
-        }
-
-        public void Delete(User user)
-        {
-            _db.Users.Remove(user);
-            _db.SaveChanges();
-        }
-
-        public void Create(User user)
-        {
-            _db.Users.Add(user);
-            _db.SaveChanges();
-        }
-
-        public void Truncate()
-        {
-            _db.Users.RemoveRange(_db.Users);
-            _db.SaveChanges();
+            return await _db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Username == user.Username || u.Email == user.Email);
         }
     }
 }
