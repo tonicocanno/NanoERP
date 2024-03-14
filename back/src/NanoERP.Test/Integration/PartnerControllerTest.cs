@@ -48,6 +48,22 @@ namespace NanoERP.Test.Integration
             };
         }
 
+        private static PartnerAddress GetAddessToTest()
+        {
+            var guid = Guid.NewGuid().ToString();
+
+            return new PartnerAddress()
+            {
+                Id = ObjectId.GenerateNewId(),
+                Street = $"TestStreet{guid}",
+                Number = "123",
+                City = "TestCity",
+                State = "TS",
+                Country = "TestCountry",
+                PostalCode = "12345678"
+            };
+        }
+
         private async Task<string> LoginAndGetTokenAsync(UserRegistrationDto registrationDto)
         {
             await _client.PostAsJsonAsync("/api/auth/register", registrationDto);
@@ -133,6 +149,59 @@ namespace NanoERP.Test.Integration
 
             var responseDelete = await _client.DeleteAsync($"/api/partners/{id}");
             responseDelete.EnsureSuccessStatusCode();
+        }
+
+        [Fact]
+        public async Task AddAddress_ShouldReturnSuccessStatusCode()
+        {
+            var registrationDto = GetUserToTest();
+            var token = await LoginAndGetTokenAsync(registrationDto);
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var partner = GetPartnerToTest();
+
+            var response = await _client.PostAsJsonAsync("/api/partners", partner);
+            response.EnsureSuccessStatusCode();
+
+            var jsonResponseString = await response.Content.ReadAsStringAsync();
+            var jsonResponse = JsonConvert.DeserializeObject(jsonResponseString);
+            var id = (jsonResponse as JObject)?.GetValue("_id")?.ToString();
+
+            var address = GetAddessToTest();
+
+            var responseAddAddress = await _client.PostAsJsonAsync($"/api/partners/{id}/addresses", address);
+            responseAddAddress.EnsureSuccessStatusCode();
+        }
+
+        [Fact]
+        public async Task RemoveAddress_ShouldReturnSuccessStatusCode()
+        {
+            var registrationDto = GetUserToTest();
+            var token = await LoginAndGetTokenAsync(registrationDto);
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var partner = GetPartnerToTest();
+
+            var response = await _client.PostAsJsonAsync("/api/partners", partner);
+            response.EnsureSuccessStatusCode();
+
+            var jsonResponseString = await response.Content.ReadAsStringAsync();
+            var jsonResponse = JsonConvert.DeserializeObject(jsonResponseString);
+            var id = (jsonResponse as JObject)?.GetValue("_id")?.ToString();
+
+            var address = GetAddessToTest();
+
+            var responseAddAddress = await _client.PostAsJsonAsync($"/api/partners/{id}/addresses", address);
+            responseAddAddress.EnsureSuccessStatusCode();
+
+            var jsonResponseAddressString = await responseAddAddress.Content.ReadAsStringAsync();
+            var jsonResponseAddress = JsonConvert.DeserializeObject(jsonResponseAddressString);
+            var addressId = (jsonResponseAddress as JObject)?.GetValue("_id")?.ToString();
+
+            var responseRemoveAddress = await _client.DeleteAsync($"/api/partners/{id}/addresses/{addressId}");
+            responseRemoveAddress.EnsureSuccessStatusCode();
         }
     }
 }
