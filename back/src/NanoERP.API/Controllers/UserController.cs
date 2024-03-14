@@ -1,8 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
-using NanoERP.API.Data;
 using NanoERP.API.Domain.Entities;
 using NanoERP.API.Services;
 
@@ -10,35 +8,48 @@ namespace NanoERP.API.Controllers
 {
     [ApiController]
     [Route("api/users")]
-    public class UserController(DataContext db) : ControllerBase
+    public class UserController(UserService service) : ControllerBase
     {
-        private readonly UserService _userService = new(db);
+        private readonly UserService _service = service;
 
         [HttpGet]
         [Authorize]
-        public ActionResult<IEnumerable<User>> Get()
+        public async Task<ActionResult<IEnumerable<User>>> Get()
         {
-            return Ok(_userService.Get());
+            return Ok(await _service.GetAsync());
         }
 
         [HttpGet("{id}")]
         [Authorize]
-        public ActionResult<User> GetById(string id)
+        public async Task<ActionResult<User>> Get(string id)
         {
-            var user = _userService.GetById(id);
-
+            var user = await _service.GetByIdAsync(id);
             if (user == null)
-                return NotFound("User not found");
+            {
+                return NotFound();
+            }
 
             return Ok(user);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(string id)
+        {
+            var user = await _service.GetByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            await _service.DeleteAsync(user);
+            return NoContent();
         }
 
         [Authorize]
         [Conditional("DEBUG")]
         [HttpGet("truncate")]
-        public void TruncateUsers_DevelopmentOnly()
+        public async void TruncateUsers_DevelopmentOnly()
         {
-            _userService.Truncate();
+            await _service.TruncateAsync();
         }
     }
 }

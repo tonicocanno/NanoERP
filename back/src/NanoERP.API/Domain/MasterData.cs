@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace NanoERP.API.Domain.Entities
+namespace NanoERP.API.Domain
 {
     public abstract class MasterData
     {
@@ -17,6 +17,8 @@ namespace NanoERP.API.Domain.Entities
         [BsonRepresentation(BsonType.ObjectId)]
         public string StringId => Id.ToString();
         [JsonPropertyOrder(-2)]
+        [MaxLength(50)]
         public virtual string Name { get; set; } = string.Empty;
+        public string? Comments { get; set; }
     }
 }

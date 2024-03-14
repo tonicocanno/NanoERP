@@ -9,7 +9,6 @@ namespace NanoERP.API.Domain.Entities
         [Required(ErrorMessage = "Name is required")]
         public override string Name { get; set; } = string.Empty;
 
-        [MaxLength(50)]
         [Required(ErrorMessage = "Surname is required")]
         public string Surname { get; set; } = string.Empty;
 

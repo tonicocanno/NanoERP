@@ -1,4 +1,4 @@
-namespace NanoERP.API.Domain.Entities.DTO;
+namespace NanoERP.API.DTO;
 
 public class UserForgotPasswordDto
 {

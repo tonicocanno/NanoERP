@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
-using NanoERP.API.Data;
 using NanoERP.API.Domain.Entities;
-using NanoERP.API.Domain.Entities.DTO;
+using NanoERP.API.DTO;
 using NanoERP.API.Services;
 using NanoERP.API.Utilities;
 
@@ -17,9 +16,9 @@ namespace NanoERP.API.Controllers
         private readonly EmailService _emailService = emailService; 
 
         [HttpPost("login")]
-        public IActionResult Auth(UserLoginDto userLogin)
+        public async Task<IActionResult> Auth(UserLoginDto userLogin)
         {
-            var user = _userService.FindByUsernameOrEmail(userLogin);
+            var user = await _userService.FindByUsernameOrEmailAsync(userLogin);
 
             if (user != null && VerifyUserPassword(userLogin.Password, user.Password))
             {
@@ -32,9 +31,9 @@ namespace NanoERP.API.Controllers
         }
 
         [HttpPost("register")]
-        public ActionResult<User> Register(UserRegistrationDto bodyUser)
+        public async Task<ActionResult<User>> Register(UserRegistrationDto bodyUser)
         {
-            var existingUser = _userService.FindByUsernameOrEmail(bodyUser);
+            var existingUser = await _userService.FindByUsernameOrEmailAsync(bodyUser);
 
             if (existingUser != null)
             {
@@ -53,15 +52,15 @@ namespace NanoERP.API.Controllers
                 Password = bodyUser.Password
             };
 
-            _userService.Create(newUser);
+            await _userService.CreateAsync(newUser);
 
             return Created("User created successfully", newUser);
         }
 
         [HttpPost("change-password")]
-        public IActionResult ChangePassword(UserChangePasswordDto userChangePassword)
+        public async Task<IActionResult> ChangePassword(UserChangePasswordDto userChangePassword)
         {
-            var user = _userService.FindByUsernameOrEmail(userChangePassword);
+            var user = await _userService.FindByUsernameOrEmailAsync(userChangePassword);
 
             if (user != null && VerifyUserPassword(userChangePassword.Password, user.Password))
             {
@@ -69,7 +68,7 @@ namespace NanoERP.API.Controllers
                 {
                     user.Password = EncryptionService.Hash(userChangePassword.NewPassword);
 
-                    _userService.Update(user);
+                    await _userService.UpdateAsync(user);
 
                     return Ok("Password changed successfully");
                 }
@@ -81,17 +80,17 @@ namespace NanoERP.API.Controllers
         }
 
         [HttpPost("forgot-password")]
-        public IActionResult ForgotPassword(UserForgotPasswordDto userForgotPassword)
+        public async Task<IActionResult> ForgotPassword(UserForgotPasswordDto userForgotPassword)
         {
-            var user = _userService.FindByEmail(userForgotPassword.Email);
+            var user = await _userService.FindByEmailAsync(userForgotPassword.Email);
 
             if (user != null)
             {
-                var newPassword = PasswordService.GenerateRandomPassword();
+                var newPassword = AuthService.GenerateRandomPassword();
 
                 user.Password = EncryptionService.Hash(newPassword);
 
-                _userService.Update(user);
+                await _userService.UpdateAsync(user);
 
                 _emailService.Send(userForgotPassword.Email, "Password recovery", $"Your new password is: {newPassword}");
 

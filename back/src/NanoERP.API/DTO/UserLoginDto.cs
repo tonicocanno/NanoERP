@@ -1,4 +1,6 @@
-namespace NanoERP.API.Domain.Entities.DTO;
+using NanoERP.API.Domain.Entities;
+
+namespace NanoERP.API.DTO;
 
 public class UserLoginDto : IUser
 {    

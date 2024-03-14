@@ -1,10 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
-using NanoERP.API.Domain.Entities.DTO;
+﻿using NanoERP.API.DTO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Net.Http.Json;
 
-namespace NanoERP.Test
+namespace NanoERP.Test.Integration
 {
     public class AuthControllerTest
     {
