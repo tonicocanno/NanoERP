@@ -17,6 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<PartnerService>();
+builder.Services.AddScoped<ProductService>();
 
 var emailService = new EmailServiceFactory(builder.Configuration).Create();
 builder.Services.AddSingleton(emailService);
