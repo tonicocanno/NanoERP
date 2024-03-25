@@ -6,6 +6,9 @@ namespace NanoERP.API.Domain.Entities
         public string? Phone1 { get; set; }
         public string? Phone2 { get; set; }
         public string? Email { get; set; }
+        public string? TaxId0 { get; set; }
+        public string? TaxId1 { get; set; }
+        public string? TaxId2 { get; set; }
         public ICollection<PartnerAddress>? Addresses { get; set; }
 
         public void AddAddress(PartnerAddress address)
