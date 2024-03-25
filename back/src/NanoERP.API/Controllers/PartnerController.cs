@@ -8,9 +8,9 @@ namespace NanoERP.API.Controllers
 {
     [ApiController]
     [Route("api/partners")]
-    public class PartnerController(PartnerService partnerService) : ControllerBase
+    public class PartnerController(PartnerService service) : ControllerBase
     {
-        private readonly PartnerService _service = partnerService;
+        private readonly PartnerService _service = service;
 
         [HttpGet]
         [Authorize]
