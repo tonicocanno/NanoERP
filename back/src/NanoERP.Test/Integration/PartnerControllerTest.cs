@@ -110,7 +110,7 @@ namespace NanoERP.Test.Integration
 
             var jsonResponseString = await response.Content.ReadAsStringAsync();
             var jsonResponse = JsonConvert.DeserializeObject(jsonResponseString);
-            var id = (jsonResponse as JObject)?.GetValue("id")?.ToString();
+            var id = (jsonResponse as JObject)?.GetValue("_id")?.ToString();
 
             var responseGet = await _client.GetAsync($"/api/partners/{id}");
             responseGet.EnsureSuccessStatusCode();

@@ -15,9 +15,10 @@ namespace NanoERP.API.Services
 
         public async Task<T?> GetByIdAsync(string id)
         {
-            return await _db.Set<T>().FirstOrDefaultAsync(x => x.Id.ToString() == id);
+            var entities = await _db.Set<T>().AsNoTracking().ToListAsync();
+            return entities.FirstOrDefault(e => e.StringId == id);
         }
-        
+
         public async Task UpdateAsync(T entity)
         {
             _db.Set<T>().Update(entity);
