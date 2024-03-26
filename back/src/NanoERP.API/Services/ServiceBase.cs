@@ -4,14 +4,9 @@ using NanoERP.API.Domain;
 
 namespace NanoERP.API.Services
 {
-    public class ServiceBase<T> where T : MasterData
+    public class ServiceBase<T>(DataContext db) where T : MasterData
     {
-        private readonly DataContext _db;
-
-        public ServiceBase(DataContext db)
-        {
-            _db = db;
-        }
+        private readonly DataContext _db = db;
 
         public async Task<IEnumerable<T>> GetAsync() 
         {
@@ -20,9 +15,10 @@ namespace NanoERP.API.Services
 
         public async Task<T?> GetByIdAsync(string id)
         {
-            return await _db.Set<T>().FirstOrDefaultAsync(x => x.Id.ToString() == id);
+            var entities = await _db.Set<T>().AsNoTracking().ToListAsync();
+            return entities.FirstOrDefault(e => e.StringId == id);
         }
-        
+
         public async Task UpdateAsync(T entity)
         {
             _db.Set<T>().Update(entity);

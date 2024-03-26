@@ -10,6 +10,7 @@ namespace NanoERP.API.Data
         public DbSet<User> Users { get; init; }
         public DbSet<Partner> Partners { get; init; }
         public DbSet<PartnerAddress> PartnerAddresses { get; init; }
+        public DbSet<Product> Products { get; init; }
 
         public static DataContext Create(IMongoDatabase database) =>
             new(new DbContextOptionsBuilder<DataContext>()
@@ -22,6 +23,7 @@ namespace NanoERP.API.Data
             modelBuilder.Entity<User>().ToCollection("users");
             modelBuilder.Entity<Partner>().ToCollection("partners");
             modelBuilder.Entity<PartnerAddress>().ToCollection("partnerAddresses");
+            modelBuilder.Entity<Product>().ToCollection("products");
         }
     }
 }
