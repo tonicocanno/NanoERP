@@ -1,4 +1,4 @@
-using NanoERP.API.Domain.Entities;
+using NanoERP.API.Domain.interfaces;
 
 namespace NanoERP.API.DTO;
 

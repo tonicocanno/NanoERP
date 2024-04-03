@@ -1,4 +1,4 @@
-namespace NanoERP.API.Domain.Entities;
+namespace NanoERP.API.Domain.interfaces;
 
 public interface IUser
 {

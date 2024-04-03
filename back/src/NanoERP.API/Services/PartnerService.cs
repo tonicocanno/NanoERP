@@ -4,7 +4,7 @@ using NanoERP.API.Domain.Entities;
 
 namespace NanoERP.API.Services
 {
-    public class PartnerService(DataContext db) : ServiceBase<Partner>(db)
+    public class PartnerService(DataContext db) : BaseService<Partner>(db)
     {
         public async Task<PartnerAddress> AddAddressAsync(Partner partner, PartnerAddress address)
         {

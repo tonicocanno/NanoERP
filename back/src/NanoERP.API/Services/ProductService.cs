@@ -3,7 +3,7 @@ using NanoERP.API.Domain.Entities;
 
 namespace NanoERP.API.Services
 {
-    public class ProductService(DataContext db) : ServiceBase<Product>(db)
+    public class ProductService(DataContext db) : BaseService<Product>(db)
     {
         
     }

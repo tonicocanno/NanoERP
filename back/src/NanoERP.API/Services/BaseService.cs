@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using NanoERP.API.Data;
-using NanoERP.API.Domain;
+using NanoERP.API.Domain.interfaces;
 
 namespace NanoERP.API.Services
 {
-    public class ServiceBase<T>(DataContext db) where T : MasterData
+    public class BaseService<T>(DataContext db) where T : class, IEntity
     {
         private readonly DataContext _db = db;
 
@@ -16,7 +16,7 @@ namespace NanoERP.API.Services
         public async Task<T?> GetByIdAsync(string id)
         {
             var entities = await _db.Set<T>().AsNoTracking().ToListAsync();
-            return entities.FirstOrDefault(e => e.StringId == id);
+            return entities.FirstOrDefault(e => e.Id.ToString() == id);
         }
 
         public async Task UpdateAsync(T entity)

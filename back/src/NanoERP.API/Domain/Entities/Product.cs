@@ -1,6 +1,8 @@
+using NanoERP.API.Domain.interfaces;
+
 namespace NanoERP.API.Domain.Entities;
 
-public class Product : MasterData
+public class Product : MasterData, IEntity
 {
     public string? Description { get; set; }
     public string? SKU { get; set; }

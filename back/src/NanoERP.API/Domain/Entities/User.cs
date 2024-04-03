@@ -1,9 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using NanoERP.API.Domain.interfaces;
 
 namespace NanoERP.API.Domain.Entities
 {
-    public class User : MasterData, IUser
+    public class User : MasterData, IUser, IEntity
     {
         [MaxLength(50)]
         [Required(ErrorMessage = "Name is required")]

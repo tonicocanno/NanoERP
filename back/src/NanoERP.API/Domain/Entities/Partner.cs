@@ -1,6 +1,8 @@
+using NanoERP.API.Domain.interfaces;
+
 namespace NanoERP.API.Domain.Entities
 {
-    public class Partner : MasterData
+    public class Partner : MasterData, IEntity
     {
         public PartnerType Type { get; set; }
         public string? Phone1 { get; set; }

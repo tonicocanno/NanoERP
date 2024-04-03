@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using NanoERP.API.Data;
 using NanoERP.API.Domain.Entities;
+using NanoERP.API.Domain.interfaces;
 
 namespace NanoERP.API.Services
 {
-    public class UserService(DataContext db) : ServiceBase<User>(db)
+    public class UserService(DataContext db) : BaseService<User>(db)
     {
         private readonly DataContext _db = db;
 
